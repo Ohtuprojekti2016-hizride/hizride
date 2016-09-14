@@ -25,6 +25,10 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
+    # last_loginiin tulee tämänhetkinen aika
+    @role
+    @current_location
+    @destination
 
     respond_to do |format|
       if @user.save
@@ -65,9 +69,7 @@ class UsersController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params[:id])
-      @role
-      @current_location
-      @destination
+
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
