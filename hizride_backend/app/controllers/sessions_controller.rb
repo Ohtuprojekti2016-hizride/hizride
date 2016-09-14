@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
     end
     # talletetaan käyttäjä sessioon
     session[:user_id] = user.id
-    user.last_login = Time.zone.now
+    user.last_login = Time.now # päivittää viimeisimmän kirjautumisen ajankohdan
     user.save
     redirect_to user
   end
