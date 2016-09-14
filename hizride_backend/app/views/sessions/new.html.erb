@@ -1,0 +1,6 @@
+<h1>Sign in</h1>
+
+<%= form_tag session_path do %>
+    <%= text_field_tag :facebook_id, params[:facebook_id] %>
+    <%= submit_tag "Log in" %>
+<% end %>

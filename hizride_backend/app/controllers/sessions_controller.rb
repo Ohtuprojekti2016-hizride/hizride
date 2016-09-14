@@ -7,11 +7,14 @@ class SessionsController < ApplicationController
     # haetaan facebookin antamaa id:tä vastaava käyttäjä tietokannasta
     user = User.find_by facebook_id: params[:facebook_id]
     # jos id:tä vastaavaa käyttäjää ei ole tietokannassa, luodaan uusi käyttäjäolio
-    if not user.nil
-      user = User.new params[:facebook_id]
+    if user.nil?
+      user = User.create facebook_id: params[:facebook_id]
     end
     # talletetaan käyttäjä sessioon
     session[:user_id] = user.id
+    user.last_login = Time.zone.now
+    user.save
+    redirect_to user
   end
 
   def destroy
