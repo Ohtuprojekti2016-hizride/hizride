@@ -6,7 +6,8 @@ RSpec.describe User, type: :model do
     @user = User.create
   end
 
-  it 'should return a blank instance' do
-    expect(@user.get_role).to eq(nil)
+  it 'should return the role set' do
+    @user.set_role('driver')
+    expect(@user.get_role).to eq('driver')
   end
 end
