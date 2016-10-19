@@ -1,0 +1,1 @@
+json.partial! "current_locations/current_location", current_location: @current_location

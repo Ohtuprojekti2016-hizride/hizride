@@ -11,13 +11,39 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160914083900) do
+ActiveRecord::Schema.define(version: 20161019111628) do
+
+  create_table "current_locations", force: :cascade do |t|
+    t.string   "lat"
+    t.string   "lng"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "heroes", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "heroes", ["name"], name: "index_heroes_on_name", unique: true
+
+  create_table "routes", force: :cascade do |t|
+    t.string   "route"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "facebook_id"
     t.time     "last_login"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.string   "role"
+    t.string   "destination_lng"
+    t.string   "destination_lat"
   end
 
 end
