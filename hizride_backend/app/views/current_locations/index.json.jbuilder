@@ -1,0 +1,1 @@
+json.array! @current_locations, partial: 'current_locations/current_location', as: :current_location
