@@ -51,6 +51,21 @@ class RoutesController < ApplicationController
     end
   end
 
+=begin
+  def update_users_route 
+    @user = User.last  
+
+    if @user.route == nil 
+      @user.route = Route.new 
+    end  
+
+    @route = @user.route 
+    @route.update(:route => params[:route])  
+
+    redirect_to @route
+  end
+=end
+
   # DELETE /routes/1
   # DELETE /routes/1.json
   def destroy

@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :set_route]
 
   # GET /users
   # GET /users.json
@@ -49,6 +49,29 @@ class UsersController < ApplicationController
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def set_route(data)
+    # @user = current_user
+    #@user = User.last
+
+    @user = User.last
+
+    if @user.route == nil
+      @user.route = Route.new
+    end
+
+    @route = @user.route
+
+    # redirect_to edit_route_path(@route.id)
+
+    #@route.update(:route => params[:route])
+    @route.update(:route => data)
+
+
+    # redirect_to @user
+
+
   end
 
   # DELETE /users/1

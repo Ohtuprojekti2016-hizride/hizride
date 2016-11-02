@@ -14,4 +14,13 @@ class MessageChannel < ApplicationCable::Channel
   def message(data)
     logger.info "DATA>> #{data}"
   end
+
+  def set_route(data)
+    logger.info "ROUTE>> #{data}"
+    #@user = User.last
+    #@user.set_route(data)
+    @user = User.last
+    @user.route = Route.new
+    @user.route.update(:route => data)
+  end
 end
