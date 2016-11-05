@@ -20,7 +20,13 @@ class MessageChannel < ApplicationCable::Channel
     #@user = User.last
     #@user.set_route(data)
     @user = User.last
-    @user.route = Route.new
-    @user.route.update(:route => data)
+    @user.route = Route.new(:route => data, :user_id => @user.id)
+    #@user.route.update(:route => data)
+  end
+
+  def set_current_location(data)
+    logger.info "LOCATION>> #{data}"
+    @user = User.last
+    @user.current_location = CurrentLocation.new(:user_id => @user.id, :lat => data)
   end
 end
