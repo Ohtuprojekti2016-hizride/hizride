@@ -25,8 +25,13 @@ class MessageChannel < ApplicationCable::Channel
   end
 
   def set_current_location(data)
-    logger.info "LOCATION>> #{data}"
+    logger.info "CURRENT LOCATION>> #{data}"
+
+    coordinates = data['data']
+    lat = coordinates['lat']
+    lng = coordinates['lng']
+
     @user = User.last
-    @user.current_location = CurrentLocation.new(:user_id => @user.id, :lat => data)
+    @user.current_location = CurrentLocation.new(:user_id => @user.id, :lat => lat, :lng => lng)
   end
 end
