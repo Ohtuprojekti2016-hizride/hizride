@@ -51,29 +51,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def set_route(data)
-    # @user = current_user
-    #@user = User.last
-
-    @user = User.last
-
-    if @user.route == nil
-      @user.route = Route.new
-    end
-
-    @route = @user.route
-
-    # redirect_to edit_route_path(@route.id)
-
-    #@route.update(:route => params[:route])
-    @route.update(:route => data)
-
-
-    # redirect_to @user
-
-
-  end
-
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
@@ -92,6 +69,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:facebook_id, :last_login)
+      params.require(:user).permit(:facebook_id, :last_login, :current_location, :route)
     end
 end

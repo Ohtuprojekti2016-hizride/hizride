@@ -3,7 +3,19 @@ class MessageChannel < ApplicationCable::Channel
   def subscribed
     @params = params
     # stream_from "some_channel"
+
+    # katsotaan, onko käyttäjä jo lisätty tietokantaan.
+    # ellei, niin lisätään se
+    if (User.find_by(facebook_id: params['user'])).nil?
+      @user = User.new(:facebook_id => params['user'])
+      @user.save
+    else
+      @user = User.find_by(facebook_id: params['user'])
+      @user.update_last_login # päivittää viimeisimmän kirjautumisen ajankohdan
+    end
+
     logger.info ">>> Subscribed #{@params}!"
+    logger.info "USER>> #{@user.id}"
   end
 
   def unsubscribed
@@ -16,22 +28,22 @@ class MessageChannel < ApplicationCable::Channel
   end
 
   def set_route(data)
-    logger.info "ROUTE>> #{data}"
-    #@user = User.last
-    #@user.set_route(data)
-    @user = User.last
-    @user.route = Route.new(:route => data, :user_id => @user.id)
-    #@user.route.update(:route => data)
+    route = data
+    logger.info "ROUTE>> #{route}"
+
+    @user = User.find_by(facebook_id: params['user'])
+    @user.set_route(route)
   end
 
   def set_current_location(data)
+    @user = User.find_by(facebook_id: params['user'])
     logger.info "CURRENT LOCATION>> #{data}"
 
     coordinates = data['data']
     lat = coordinates['lat']
     lng = coordinates['lng']
 
-    @user = User.last
-    @user.current_location = CurrentLocation.new(:user_id => @user.id, :lat => lat, :lng => lng)
+    @user.set_current_location(lat, lng)
+
   end
 end
