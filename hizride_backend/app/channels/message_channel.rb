@@ -28,11 +28,12 @@ class MessageChannel < ApplicationCable::Channel
   end
 
   def set_route(data)
-    route = data
-    logger.info "ROUTE>> #{route}"
+    route = data['data']
+    decodedRoute = Polylines::Decoder.decode_polyline(route)
+    logger.info "ROUTE>> #{decodedRoute}"
 
     @user = User.find_by(facebook_id: params['user'])
-    @user.set_route(route)
+    @user.set_route(decodedRoute)
   end
 
   def set_current_location(data)

@@ -58,4 +58,6 @@ Rails.application.routes.draw do
   #   end
 
   resource :session, only: [:new, :create, :destroy]
+
+  get 'drivermap', to:'users#drivermap'
 end
