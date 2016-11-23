@@ -70,7 +70,7 @@ class MessageChannel < ApplicationCable::Channel
 
     MessageChannel.broadcast_to(
       @user,
-      @hikerlist
+      body: @hikerlist
     )
   end
 
