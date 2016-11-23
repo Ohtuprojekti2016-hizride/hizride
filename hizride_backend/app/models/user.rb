@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
   has_one :current_location
   has_one :route
 
+  enum role: [ :driver, :hiker ]
+
   def update_last_login
     self.last_login = Time.now # päivittää viimeisimmän kirjautumisen ajankohdan
   end

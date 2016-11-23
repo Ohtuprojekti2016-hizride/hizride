@@ -26,7 +26,11 @@ class MessageChannel < ApplicationCable::Channel
   end
 
   def message(data)
-    logger.info "DATA>> #{data}"
+    logger.info "DATA>> #{data["message"]}"
+  end
+
+  def setUserLocation(location)
+    logger.info "USER LOCATION>> #{data["location"]}"
   end
 
   def set_route(data)

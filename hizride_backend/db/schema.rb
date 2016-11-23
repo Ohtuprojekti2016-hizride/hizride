@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161019111628) do
+ActiveRecord::Schema.define(version: 20161121112612) do
 
   create_table "current_locations", force: :cascade do |t|
     t.string   "lat"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20161019111628) do
     t.time     "last_login"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "role"
   end
 
 end
