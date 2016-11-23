@@ -40,6 +40,8 @@ class MessageChannel < ApplicationCable::Channel
 
     @user = User.find_by(facebook_id: params['user'])
     @user.set_route(decodedRoute)
+
+    send_hikers_to_driver
   end
 
   def set_current_location(data)
@@ -51,11 +53,24 @@ class MessageChannel < ApplicationCable::Channel
     lng = coordinates['lng']
 
     @user.set_current_location(lat, lng)
+  end
+
+  def send_hikers_to_driver
+    @hikers = User.where(role: :hiker)
+
+      @hikerlist = @hikers.map do |hiker|
+        {
+        :facebook_id => hiker.facebook_id,
+        :current_location_lat => hiker.current_location.lat,
+        :current_location_lng => hiker.current_location.lng
+        }
+      end
+
+    json = @hikerlist.to_json
 
     MessageChannel.broadcast_to(
       @user,
-      title: 'Moi',
-      body: 'Jea'
+      @hikerlist
     )
   end
 
