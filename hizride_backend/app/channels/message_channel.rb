@@ -14,6 +14,8 @@ class MessageChannel < ApplicationCable::Channel
       @user.update_last_login # päivittää viimeisimmän kirjautumisen ajankohdan
     end
 
+    stream_for @user
+
     logger.info ">>> Subscribed #{@params}!"
     logger.info "USER>> #{@user.id}"
   end
@@ -46,5 +48,11 @@ class MessageChannel < ApplicationCable::Channel
 
     @user.set_current_location(lat, lng)
 
+    MessageChannel.broadcast_to(
+      @user,
+      title: 'Moi',
+      body: 'Jea'
+    )
   end
+
 end
