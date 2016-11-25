@@ -4,20 +4,25 @@ class MessageChannel < ApplicationCable::Channel
     @params = params
     # stream_from "some_channel"
 
-    # katsotaan, onko käyttäjä jo lisätty tietokantaan.
-    # ellei, niin lisätään se
-    if (User.find_by(facebook_id: params['user'])).nil?
-      @user = User.new(:facebook_id => params['user'])
-      @user.save
-    else
-      @user = User.find_by(facebook_id: params['user'])
-      @user.update_last_login # päivittää viimeisimmän kirjautumisen ajankohdan
-    end
+    @user = User.first
 
     stream_for @user
 
     logger.info ">>> Subscribed #{@params}!"
     logger.info "USER>> #{@user.id}"
+  end
+
+  def set_facebook_id(data)
+    uid = data['data']
+
+    # katsotaan, onko käyttäjä jo lisätty tietokantaan.
+    # ellei, niin lisätään se
+    if (User.find_by(facebook_id: uid)).nil?
+      @user = User.create(:facebook_id => uid)
+    else
+      @user = User.find_by(facebook_id: uid)
+      @user.update_last_login # päivittää viimeisimmän kirjautumisen ajankohdan
+    end
   end
 
   def unsubscribed
@@ -38,14 +43,14 @@ class MessageChannel < ApplicationCable::Channel
     decodedRoute = Polylines::Decoder.decode_polyline(route)
     logger.info "ROUTE>> #{decodedRoute}"
 
-    @user = User.find_by(facebook_id: params['user'])
+    #@user = User.find_by(facebook_id: params['user'])
     @user.set_route(decodedRoute)
 
     send_hikers_to_driver
   end
 
   def set_current_location(data)
-    @user = User.find_by(facebook_id: params['user'])
+    #@user = User.find_by(facebook_id: params['user'])
     logger.info "CURRENT LOCATION>> #{data}"
 
     coordinates = data['data']
