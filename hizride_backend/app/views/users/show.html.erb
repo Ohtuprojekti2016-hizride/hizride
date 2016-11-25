@@ -10,5 +10,15 @@
   <%= @user.last_login %>
 </p>
 
+<p>
+  <strong>Hiker/driver:</strong>
+    <% if @user.hiker? %>
+      hiker
+    <% else %>
+      driver
+    <% end %>
+
+</p>
+
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>
