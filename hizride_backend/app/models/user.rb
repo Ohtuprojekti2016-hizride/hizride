@@ -27,4 +27,18 @@ class User < ActiveRecord::Base
     end
     self.current_location.update(:lat => lat, :lng => lng)
   end
+
+  def close_to_route(route)
+    for coordinate in route.to_array do
+      coordinate_array = coordinate.split(", ")
+      lat = coordinate_array.first
+      lng = coordinate_array.last
+
+      if self.current_location.close_to_location(lat, lng)
+        return true
+      end
+    end
+
+    return false
+  end
 end

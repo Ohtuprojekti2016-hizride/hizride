@@ -36,7 +36,7 @@ class MessageChannel < ApplicationCable::Channel
   def set_route(data)
     route = data['data']
     decodedRoute = Polylines::Decoder.decode_polyline(route)
-    logger.info "ROUTE>> #{decodedRoute}"
+    #logger.info "ROUTE>> #{decodedRoute}"
 
     @user = User.find_by(facebook_id: params['user'])
     @user.set_route(decodedRoute)
@@ -57,14 +57,21 @@ class MessageChannel < ApplicationCable::Channel
 
   def send_hikers_to_driver
     @hikers = User.where(role: :hiker)
+    @hikers_close_to_route = Array.new
+    @user = User.find_by(facebook_id: params['user'])
 
-      @hikerlist = @hikers.map do |hiker|
-        {
-        :facebook_id => hiker.facebook_id,
-        :current_location_lat => hiker.current_location.lat,
-        :current_location_lng => hiker.current_location.lng
-        }
+    @hikers.each do |hiker|
+      if hiker.close_to_route(@user.route)
+        @hikers_close_to_route.push(hiker)
       end
+    end
+
+    @hikerlist = @hikers_close_to_route.map do |hiker| {
+      :facebook_id => hiker.facebook_id,
+      :current_location_lat => hiker.current_location.lat,
+      :current_location_lng => hiker.current_location.lng
+      }
+    end
 
     json = @hikerlist.to_json
 
