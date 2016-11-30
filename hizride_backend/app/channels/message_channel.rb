@@ -4,12 +4,16 @@ class MessageChannel < ApplicationCable::Channel
     @params = params
     # stream_from "some_channel"
 
-    @user = User.first
+    if (User.find_by(facebook_id: @params['user'])).nil?
+      @user_to_stream_for = User.create(:facebook_id => @params['user'])
+    else
+      @user_to_stream_for = User.find_by(facebook_id: @params['user'])
+    end
 
-    stream_for @user
+    stream_for @user_to_stream_for
 
     logger.info ">>> Subscribed #{@params}!"
-    logger.info "USER>> #{@user.id}"
+    logger.info "USER>> #{@user_to_stream_for.id}"
   end
 
   def set_facebook_id(data)
@@ -74,7 +78,7 @@ class MessageChannel < ApplicationCable::Channel
     json = @hikerlist.to_json
 
     MessageChannel.broadcast_to(
-      @user,
+      @curuser,
       body: json
     )
   end
