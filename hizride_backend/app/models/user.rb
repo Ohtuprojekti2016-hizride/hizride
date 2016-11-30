@@ -27,4 +27,12 @@ class User < ActiveRecord::Base
     end
     self.current_location.update(:lat => lat, :lng => lng)
   end
+
+  def get_hikers
+    User.where(role: :hiker)
+  end
+
+  def get_drivers
+    User.where(role: :driver)
+  end
 end
