@@ -82,7 +82,7 @@ class MessageChannel < ApplicationCable::Channel
     json = @hikerlist.to_json
 
     MessageChannel.broadcast_to(
-      @curuser,
+      @user_to_stream_for,
       body: json
     )
   end
