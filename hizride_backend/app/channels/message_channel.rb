@@ -23,6 +23,10 @@ class MessageChannel < ApplicationCable::Channel
       @user = User.find_by(facebook_id: uid)
       @user.update_last_login # päivittää viimeisimmän kirjautumisen ajankohdan
     end
+
+    logger.info ">>> Subscribed #{@params}!"
+    logger.info "USERID RECEIVED>> #{params['user']}"
+    logger.info "USER>> #{@user.id}"
   end
 
   def unsubscribed
@@ -77,6 +81,10 @@ class MessageChannel < ApplicationCable::Channel
       @user,
       body: json
     )
+  end
+
+  def get_suitable_hikers()
+    User.get_hikers
   end
 
 end
