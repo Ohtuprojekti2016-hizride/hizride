@@ -14,10 +14,11 @@ class User < ActiveRecord::Base
       self.route.save
     end
     self.route.update(:route => route)
+  end
 
-
-    #@user.set_route(data)
-    #@user.route.update(:route => data)
+  def update_role(role)
+    self.role = role
+    self.save
   end
 
   def set_current_location(lat, lng)

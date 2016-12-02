@@ -25,7 +25,7 @@ class MessageChannel < ApplicationCable::Channel
       @user = User.create(:facebook_id => uid)
     else
       @user = User.find_by(facebook_id: uid)
-      @user.update_last_login # päivittää viimeisimmän kirjautumisen ajankohdan
+      #@user.update_last_login # päivittää viimeisimmän kirjautumisen ajankohdan
     end
 
     logger.info ">>> Subscribed #{@params}!"
@@ -42,8 +42,10 @@ class MessageChannel < ApplicationCable::Channel
     logger.info "DATA>> #{data["message"]}"
   end
 
-  def setUserLocation(location)
-    logger.info "USER LOCATION>> #{data["location"]}"
+  def set_role(data)
+    logger.info "ROLE >> #{data}"
+    role = data['data']
+    @user.update_role(role)
   end
 
   def set_route(data)
