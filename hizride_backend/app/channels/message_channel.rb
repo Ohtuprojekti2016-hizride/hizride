@@ -25,7 +25,7 @@ class MessageChannel < ApplicationCable::Channel
       @user = User.create(:facebook_id => uid)
     else
       @user = User.find_by(facebook_id: uid)
-      #@user.update_last_login # päivittää viimeisimmän kirjautumisen ajankohdan
+      @user.update_last_login # päivittää viimeisimmän kirjautumisen ajankohdan
     end
 
     logger.info ">>> Subscribed #{@params}!"
