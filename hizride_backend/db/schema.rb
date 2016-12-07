@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161207110153) do
+ActiveRecord::Schema.define(version: 20161207122000) do
 
   create_table "current_locations", force: :cascade do |t|
     t.string   "lat"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20161207110153) do
     t.string   "destination_lng"
     t.string   "name"
     t.string   "destination_name"
+    t.integer  "hiker_id"
   end
 
 end

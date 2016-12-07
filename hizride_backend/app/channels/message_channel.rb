@@ -84,6 +84,28 @@ class MessageChannel < ApplicationCable::Channel
     @user.set_current_location(lat, lng)
   end
 
+  def set_hiker_id(data)
+    id = data['fb_id']
+    @user.update(:hiker_id => id)
+  end
+
+#driverilla on kenttä, jossa on kyytiinotettavan liftarin id
+  def find_a_driver
+    drivers = User.where(:role => "driver")
+
+    drivers.each do |driver|
+      #jos jollain kuskille on hikerin id, niin lähetetään liftarille kuskin fb_id
+      if driver.hiker_id = self.facebook_id
+
+        MessageChannel.broadcast_to(
+          @user_to_stream_for,
+          method: "driver to hiker",
+          body: driver.facebook_id
+        )
+      end
+    end
+  end
+
   def send_hikers_to_driver
     @hikers = User.where(role: :hiker)
 
@@ -102,6 +124,7 @@ class MessageChannel < ApplicationCable::Channel
 
     MessageChannel.broadcast_to(
       @user_to_stream_for,
+      method: "hikers to driver",
       body: json
     )
   end
