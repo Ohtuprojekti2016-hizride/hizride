@@ -42,6 +42,11 @@ class MessageChannel < ApplicationCable::Channel
     logger.info "DATA>> #{data["message"]}"
   end
 
+  def set_name(data)
+    name = data['data']
+    @user.update(:name => name)
+  end
+
   def set_role(data)
     logger.info "ROLE >> #{data}"
     role = data['data']

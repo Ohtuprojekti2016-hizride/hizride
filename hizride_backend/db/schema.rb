@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161207093011) do
+ActiveRecord::Schema.define(version: 20161207100345) do
 
   create_table "current_locations", force: :cascade do |t|
     t.string   "lat"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 20161207093011) do
     t.integer  "role"
     t.string   "destination_lat"
     t.string   "destination_lng"
+    t.string   "name"
   end
 
 end
