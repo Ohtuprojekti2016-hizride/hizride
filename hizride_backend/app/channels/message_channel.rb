@@ -90,6 +90,8 @@ class MessageChannel < ApplicationCable::Channel
       @hikerlist = @hikers.map do |hiker|
         {
         :facebook_id => hiker.facebook_id,
+        :current_location_lat => hiker.current_location.lat,
+        :current_location_lng => hiker.current_location.lng,
         :destination_lat => hiker.destination_lat,
         :destination_lng => hiker.destination_lng
         }
