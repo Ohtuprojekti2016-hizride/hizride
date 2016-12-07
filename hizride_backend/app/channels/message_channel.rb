@@ -92,6 +92,7 @@ class MessageChannel < ApplicationCable::Channel
         :facebook_id => hiker.facebook_id,
         :current_location_lat => hiker.current_location.lat,
         :current_location_lng => hiker.current_location.lng,
+        :destination_name => hiker.destination_name,
         :destination_lat => hiker.destination_lat,
         :destination_lng => hiker.destination_lng
         }
