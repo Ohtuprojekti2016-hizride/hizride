@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161121112612) do
+ActiveRecord::Schema.define(version: 20161207093011) do
 
   create_table "current_locations", force: :cascade do |t|
     t.string   "lat"
@@ -30,9 +30,11 @@ ActiveRecord::Schema.define(version: 20161121112612) do
   create_table "users", force: :cascade do |t|
     t.string   "facebook_id"
     t.time     "last_login"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.integer  "role"
+    t.string   "destination_lat"
+    t.string   "destination_lng"
   end
 
 end

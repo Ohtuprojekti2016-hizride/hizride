@@ -59,6 +59,14 @@ class MessageChannel < ApplicationCable::Channel
     send_hikers_to_driver
   end
 
+  def set_destination(data)
+    coordinates = data['data']
+    lat = coordinates['lat']
+    lng = coordinates['lng']
+
+    @user.set_destination(lat, lng)
+  end
+
   def set_current_location(data)
     #@user = User.find_by(facebook_id: params['user'])
     logger.info "CURRENT LOCATION>> #{data}"
@@ -76,8 +84,8 @@ class MessageChannel < ApplicationCable::Channel
       @hikerlist = @hikers.map do |hiker|
         {
         :facebook_id => hiker.facebook_id,
-        :current_location_lat => hiker.current_location.lat,
-        :current_location_lng => hiker.current_location.lng
+        :destination_lat => hiker.destination_lat,
+        :destination_lng => hiker.destination_lng
         }
       end
 

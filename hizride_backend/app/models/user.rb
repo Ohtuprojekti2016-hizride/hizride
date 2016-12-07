@@ -16,6 +16,10 @@ class User < ActiveRecord::Base
     self.route.update(:route => route)
   end
 
+  def set_destination(lat, lng)
+    self.update(:destination_lat => lat, :destination_lng => lng)
+  end
+
   def update_role(role)
     self.role = role
     self.save
