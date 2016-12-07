@@ -65,11 +65,12 @@ class MessageChannel < ApplicationCable::Channel
   end
 
   def set_destination(data)
-    coordinates = data['data']
-    lat = coordinates['lat']
-    lng = coordinates['lng']
+    place = data['data']
+    name = place['name']
+    lat = place['lat']
+    lng = place['lng']
 
-    @user.set_destination(lat, lng)
+    @user.set_destination(name, lat, lng)
   end
 
   def set_current_location(data)
