@@ -93,17 +93,19 @@ class MessageChannel < ApplicationCable::Channel
   def find_a_driver
     drivers = User.where(:role => "driver")
 
+    palautetaan = null
+
     drivers.each do |driver|
       #jos jollain kuskille on hikerin id, niin lähetetään liftarille kuskin fb_id
       if driver.hiker_id = self.facebook_id
-
-        MessageChannel.broadcast_to(
+        palautetaan = driver.facebook_id
+      end
+    end
+    MessageChannel.broadcast_to(
           @user_to_stream_for,
           method: "driver to hiker",
           body: driver.facebook_id
         )
-      end
-    end
   end
 
   def send_hikers_to_driver
