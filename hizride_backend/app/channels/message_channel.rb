@@ -36,6 +36,12 @@ class MessageChannel < ApplicationCable::Channel
   def unsubscribed
     @params = params
     logger.info ">>> Unsubscribed #{@params}!"
+
+    @user = User.find_by(facebook_id: @params['user'])
+
+    @user.current_location.delete
+    @user.route.delete
+    @user.update(:role => nil, :destination_lat => nil, :destination_lng => nil, :destination_name => nil, :current_location => nil, :route => nil)
   end
 
   def message(data)
