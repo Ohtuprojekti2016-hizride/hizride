@@ -19,7 +19,7 @@
         <td><%= user.last_login %></td>
         <% if user.hiker? %>
           <td>hiker</td>
-        <% else %>
+        <% elsif user.driver? %>
           <td>driver</td>
         <% end %>
         <td><%= link_to 'Show', user %></td>

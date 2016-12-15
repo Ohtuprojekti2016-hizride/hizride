@@ -14,7 +14,7 @@
   <strong>Hiker/driver:</strong>
     <% if @user.hiker? %>
       hiker
-    <% else %>
+    <% elseif @user.driver? %>
       driver
     <% end %>
 

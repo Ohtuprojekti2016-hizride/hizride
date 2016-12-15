@@ -34,7 +34,20 @@ class User < ActiveRecord::Base
   end
 
   def get_hikers
-    User.where(role: :hiker)
+    @hikers = User.where(role: :hiker)
+
+    @hikerlist = @hikers.map do |hiker|
+      {
+          :facebook_id => hiker.facebook_id,
+          :current_location_lat => hiker.current_location.lat,
+          :current_location_lng => hiker.current_location.lng,
+          :destination_name => hiker.destination_name,
+          :destination_lat => hiker.destination_lat,
+          :destination_lng => hiker.destination_lng
+      }
+    end
+
+    return @hikerlist.to_json
   end
 
   def get_drivers

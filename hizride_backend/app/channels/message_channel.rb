@@ -4,6 +4,7 @@ class MessageChannel < ApplicationCable::Channel
     @params = params
     # stream_from "some_channel"
 
+    # valitaan käyttäjä, jolta ja jolle striimataan
     if (User.find_by(facebook_id: @params['user'])).nil?
       @user_to_stream_for = User.create(:facebook_id => @params['user'])
     else
@@ -13,7 +14,6 @@ class MessageChannel < ApplicationCable::Channel
     stream_for @user_to_stream_for
 
     logger.info ">>> Subscribed #{@params}!"
-    logger.info "USER>> #{@user_to_stream_for.id}"
   end
 
   def set_facebook_id(data)
@@ -27,21 +27,11 @@ class MessageChannel < ApplicationCable::Channel
       @user = User.find_by(facebook_id: uid)
       @user.update_last_login # päivittää viimeisimmän kirjautumisen ajankohdan
     end
-
-    logger.info ">>> Subscribed #{@params}!"
-    logger.info "USERID RECEIVED>> #{params['user']}"
-    logger.info "USER>> #{@user.id}"
   end
 
   def unsubscribed
     @params = params
     logger.info ">>> Unsubscribed #{@params}!"
-
-    @user = User.find_by(facebook_id: @params['user'])
-
-    @user.current_location.delete
-    @user.route.delete
-    @user.update(:role => nil, :destination_lat => nil, :destination_lng => nil, :destination_name => nil, :current_location => nil, :route => nil)
   end
 
   def message(data)
@@ -62,9 +52,6 @@ class MessageChannel < ApplicationCable::Channel
   def set_route(data)
     route = data['data']
     decodedRoute = Polylines::Decoder.decode_polyline(route)
-    logger.info "ROUTE>> #{decodedRoute}"
-
-    #@user = User.find_by(facebook_id: params['user'])
     @user.set_route(decodedRoute)
 
     send_hikers_to_driver
@@ -80,9 +67,6 @@ class MessageChannel < ApplicationCable::Channel
   end
 
   def set_current_location(data)
-    #@user = User.find_by(facebook_id: params['user'])
-    logger.info "CURRENT LOCATION>> #{data}"
-
     coordinates = data['data']
     lat = coordinates['lat']
     lng = coordinates['lng']
@@ -90,30 +74,14 @@ class MessageChannel < ApplicationCable::Channel
     @user.set_current_location(lat, lng)
   end
 
+  # reitin haun yhteydessä lähetetään kaikki liftarit kuski-clientille
   def send_hikers_to_driver
-    @hikers = User.where(role: :hiker)
-
-      @hikerlist = @hikers.map do |hiker|
-        {
-        :facebook_id => hiker.facebook_id,
-        :current_location_lat => hiker.current_location.lat,
-        :current_location_lng => hiker.current_location.lng,
-        :destination_name => hiker.destination_name,
-        :destination_lat => hiker.destination_lat,
-        :destination_lng => hiker.destination_lng
-        }
-      end
-
-    json = @hikerlist.to_json
+    @hikers = User.get_hikers
 
     MessageChannel.broadcast_to(
       @user_to_stream_for,
-      body: json
+      body: @hikers
     )
-  end
-
-  def get_suitable_hikers()
-    User.get_hikers
   end
 
 end
